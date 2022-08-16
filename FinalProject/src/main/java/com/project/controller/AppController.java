@@ -1,6 +1,7 @@
 package com.project.controller;
 
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,11 @@ public class AppController {
 		
 		// System.out.println(login.getUsername() + " " + login.getPassword());
 		return service.login(login.getUsername(), login.getPassword());
+	}
+	
+	@RequestMapping(value = "/getAllUserAcc", method = RequestMethod.GET)
+	public Map<String, ArrayList<String>> getAllUserAccounts() {
+		return service.getAllUserAccounts();
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.project.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +40,15 @@ public class Services {
 	public Map<String,String> login(String username, String password) {
 		//Map<String, Boolean> res = new HashMap<String, Boolean>();
 		return dao.login(username, password);
+	}
+	
+	public Map<String, ArrayList<String>> getAllUserAccounts() {
+		Map<String, ArrayList<String>> map = dao.getAllUserDetails();
+		for(String item: map.keySet()) {
+			System.out.println(item + " " + map.get(item).toString());
+		}
+		
+		return map;
 	}
 
 }
