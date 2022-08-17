@@ -40,17 +40,22 @@ public class Dao {
 	}
 
 	public int account(Account account) {
+		Random r = new Random( System.currentTimeMillis() );
+	    long accNo = 10000 + r.nextInt(20000);
+	    //System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@ " + String.valueOf(accNo));
+	    account.setAccountNo(String.valueOf(accNo));
 		int rowsInserted = 0;
 		String sql = "INSERT INTO account(`accountNo`, `accountType`, `accountBalance`, `username`) "
 				+ "VALUES (? , ? , ? , ?)";
-
+		
+		//System.out.println("$$$$$$$$$");
+		System.out.println(account);
 		try {
 			
-			Random r = new Random( System.currentTimeMillis() );
-		    long accNo = 10000 + r.nextInt(20000);
+			
 			Connection con = getConnection();
 			PreparedStatement pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, String.valueOf(accNo));
+			pstmt.setString(1, account.getAccountNo());
 			pstmt.setString(2, account.getAccountType());
 			pstmt.setString(3, account.getAccountBalance());
 			pstmt.setString(4, account.getUsername());
