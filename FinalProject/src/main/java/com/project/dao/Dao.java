@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.stereotype.Component;
 
@@ -44,10 +45,12 @@ public class Dao {
 				+ "VALUES (? , ? , ? , ?)";
 
 		try {
-
+			
+			Random r = new Random( System.currentTimeMillis() );
+		    long accNo = 10000 + r.nextInt(20000);
 			Connection con = getConnection();
 			PreparedStatement pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, account.getAccountNo());
+			pstmt.setString(1, String.valueOf(accNo));
 			pstmt.setString(2, account.getAccountType());
 			pstmt.setString(3, account.getAccountBalance());
 			pstmt.setString(4, account.getUsername());

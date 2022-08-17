@@ -20,6 +20,13 @@ public class Account {
 		this.accountType = accountType;
 		this.accountBalance = accountBalance;
 	}
+	
+	public Account(String username, String accountType, String accountBalance) {
+		super();
+		this.username = username;
+		this.accountType = accountType;
+		this.accountBalance = accountBalance;
+	}
 
 
 	public String getUsername() {
