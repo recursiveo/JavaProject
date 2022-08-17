@@ -125,51 +125,67 @@ public class Dao {
 	}
 
 	public Map<String, ArrayList<String>> getAllUserDetails(){
-		Map<String, String> res = new HashMap<String, String>();
-		Map<String, ArrayList<String>> userMap = new HashMap<String, ArrayList<String>>();
-		String sql = "SELECT a.username, a.fname, a.lname, b.accountNo, b.accountType FROM user a, account b WHERE a.username = b.username order by username;";
+		//Map<String, String> res = new HashMap<String, String>();
+		Map<String, ArrayList<String>> accMap = new HashMap<String, ArrayList<String>>();
+		Map<String, ArrayList<String>> userAccMap = new HashMap<String, ArrayList<String>>();
+		//String sql = "SELECT a.username, a.fname, a.lname, b.accountNo, b.accountType FROM user a, account b WHERE a.username = b.username order by username;";
+		String sql1 = "SELECT username,fname,lname FROM user";
+		String sql2 = "SELECT username, accountNo, accountType FROM account";
 		
 		try {
 			
 			Connection con = getConnection();
-			PreparedStatement pstmt = con.prepareStatement(sql);
-	
+			//PreparedStatement pstmt = con.prepareStatement(sql);
+			PreparedStatement st1 = con.prepareStatement(sql1);
+			PreparedStatement st2 = con.prepareStatement(sql2);
 			
-			ResultSet rowsRetured = pstmt.executeQuery();
+			//ResultSet rowsRetured = pstmt.executeQuery();
+			ResultSet res1 = st1.executeQuery();
+			ResultSet res2 = st2.executeQuery();
 			
-			while(rowsRetured.next()) {
+//			while(rowsRetured.next()) {
+//				
+//				if(!(userMap.containsKey(rowsRetured.getString(1)))) {
+//					ArrayList<String> list = new ArrayList<String>();
+//					list.add(rowsRetured.getString(5));
+//					userMap.put(rowsRetured.getString(1), list);
+//				}else {
+//					ArrayList<String> list = userMap.get(rowsRetured.getString(1));
+//					list.add(rowsRetured.getString(5));
+//					userMap.put(rowsRetured.getString(1), list);
+//				}				
+//				
+//			}
+			while(res2.next()) {
 				
-				if(!(userMap.containsKey(rowsRetured.getString(1)))) {
+				if(!(accMap.containsKey(res2.getString(1)))) {
 					ArrayList<String> list = new ArrayList<String>();
-					list.add(rowsRetured.getString(5));
-					userMap.put(rowsRetured.getString(1), list);
+					list.add(res2.getString(3));
+					accMap.put(res2.getString(1), list);
 				}else {
-					ArrayList<String> list = userMap.get(rowsRetured.getString(1));
-					list.add(rowsRetured.getString(5));
-					userMap.put(rowsRetured.getString(1), list);
+					ArrayList<String> list = accMap.get(res2.getString(1));
+					list.add(res2.getString(3));
+					accMap.put(res2.getString(1), list);
+				}	
+				//System.out.println("$$$$$$$$$$$$$$$$$$$$$$$" + accMap);
+			}
+		while(res1.next()) {
+			if(!(userAccMap.containsKey(res1.getString(1)))) {
+				ArrayList<String> accList = accMap.get(res1.getString(1));
+				
+				if(accList == null) {
+					accList = new ArrayList<String>();
 				}
 				
-				
-				
-//				Map alist = new HashMap<String, String>();
-//				alist.put(res, sql);
-//				UserAccountType userAccountType = new UserAccountType();
-//				userAccountType.setUsername(rowsRetured.getString(1));
-//				userAccountType.setFname(rowsRetured.getString(2));
-//				userAccountType.setLname(rowsRetured.getString(3));
-//				userAccountType.setAccountList();
-				
-				
-				
-				
-				
+				userAccMap.put(res1.getString(1), accList);
 			}
+		}
 					
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-
-		return userMap;
+		//System.out.println("^^^^^^^^^^^^^^^^^^^^^" + userAccMap);
+		return userAccMap;
 	}
 
 }

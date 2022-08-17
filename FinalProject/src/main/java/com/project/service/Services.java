@@ -44,10 +44,6 @@ public class Services {
 	
 	public Map<String, ArrayList<String>> getAllUserAccounts() {
 		Map<String, ArrayList<String>> map = dao.getAllUserDetails();
-		for(String item: map.keySet()) {
-			System.out.println(item + " " + map.get(item).toString());
-		}
-		
 		return map;
 	}
 
