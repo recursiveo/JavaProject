@@ -69,4 +69,23 @@ public class Services {
 		return count > 0 ? true : false; 
 	}
 
+	public String withdrawMoney(Map<String, String> accountDetails) {
+		String accountNo = accountDetails.get("accountNo");
+		String amount = accountDetails.get("amount");
+		String currentBalance = dao.getAccount(accountNo).getAccountBalance();
+		
+		int updatedBalance = Integer.parseInt(currentBalance) - Integer.parseInt(amount);
+		
+		if(updatedBalance < 0) {
+			return "Insufficient funds in account";
+		}
+		int count = dao.depositMoney(accountNo, String.valueOf(updatedBalance));
+		
+		if(count ==  1) {
+			return "Deposited";
+		}
+		
+		return "Error";
+	}
+
 }

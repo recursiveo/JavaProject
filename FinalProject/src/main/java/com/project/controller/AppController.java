@@ -73,5 +73,11 @@ public class AppController {
 		
 		return service.depositMoney(accountDetails);
 	}
+	
+	@RequestMapping(value = "/withdrawMoney", method = RequestMethod.POST)
+	public String withdrawMoney(@RequestBody Map<String, String> accountDetails) {
+		
+		return service.withdrawMoney(accountDetails);
+	}
 
 }
