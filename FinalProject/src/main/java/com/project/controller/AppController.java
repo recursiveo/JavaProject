@@ -2,6 +2,7 @@ package com.project.controller;
 
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,9 +63,14 @@ public class AppController {
 	}
 	
 	@RequestMapping(value = "/getAccountsForUser", method = RequestMethod.GET)
-	public Map<Integer, Account> getAccountsForUser(@RequestParam("username") String username){
+	public List<Account> getAccountsForUser(@RequestParam("username") String username){
 		
 		return service.getAccountsForUser(username);
+	}
+	
+	public Boolean depositMoney(@RequestBody Map<String, String> accountDetails) {
+		
+		return service.depositMoney(accountDetails);
 	}
 
 }

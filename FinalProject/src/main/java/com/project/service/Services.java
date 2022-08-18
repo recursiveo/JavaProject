@@ -2,6 +2,7 @@ package com.project.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,9 +53,20 @@ public class Services {
 		return dao.getUserDetails(username);
 	}
 	
-	public Map<Integer, Account> getAccountsForUser(String username){
+	public List<Account> getAccountsForUser(String username){
 		
 		return dao.getAccountDetails(username);
+	}
+
+	public Boolean depositMoney(Map<String, String> accountDetails) {
+		String accountNo = accountDetails.get("accountNo");
+		String amount = accountDetails.get("amount");
+		String currentBalance = dao.getAccount(accountNo).getAccountBalance();
+		
+		String updatedBalance = currentBalance + amount;
+		int count = dao.depositMoney(accountNo, updatedBalance);
+		
+		return count > 0 ? true : false; 
 	}
 
 }

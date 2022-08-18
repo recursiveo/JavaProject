@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -208,8 +209,8 @@ public class Dao {
 		return userDetails;
 	}
 	
-	public Map<Integer, Account> getAccountDetails(String username){
-		Map<Integer, Account> accDetails = new HashMap<Integer, Account>();
+	public List<Account> getAccountDetails(String username){
+		ArrayList<Account> accArr = new ArrayList<Account>();
 		String sql = "SELECT `accountNo`, `accountType`, `accountBalance`, `username` FROM `account` WHERE username = ?";
 		
 		try {
@@ -222,7 +223,7 @@ public class Dao {
 			int count = 0;
 			while(rs.next()) {
 				Account acc = new Account(username, rs.getString(1),rs.getString(2), rs.getString(3));
-				accDetails.put(count++, acc);
+				accArr.add(acc);
 
 			}
 			
@@ -234,7 +235,51 @@ public class Dao {
 			e.printStackTrace();
 		}
 		
-		return accDetails;
+		return accArr;
+	}
+
+	public int depositMoney(String accountNo, String amount) {
+		String sql = "UPDATE `account` SET `accountBalance`= ? WHERE `accountNo`=?";
+		int rowsAffected = 0;
+		try {
+			Connection con = getConnection();
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setString(1, amount);
+			
+			rowsAffected = pst.executeUpdate();
+		}catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return rowsAffected;
+	}
+	
+	public Account getAccount(String accountNo) {
+		String sql = "SELECT `accountNo`, `accountType`, `accountBalance`, `username` FROM `account` WHERE `accountNo`=?";
+		Account acc = null;
+		try {
+			Connection con = getConnection();
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setString(1, accountNo);
+			
+			ResultSet rs = pst.executeQuery();
+			
+			while(rs.next()) {
+				acc = new Account(rs.getString(4), rs.getString(1),rs.getString(2), rs.getString(3));
+
+			}
+		}catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		return acc;
 	}
 
 }
