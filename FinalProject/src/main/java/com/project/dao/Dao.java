@@ -245,6 +245,7 @@ public class Dao {
 			Connection con = getConnection();
 			PreparedStatement pst = con.prepareStatement(sql);
 			pst.setString(1, amount);
+			pst.setString(2, accountNo);
 			
 			rowsAffected = pst.executeUpdate();
 		}catch (SQLException e) {

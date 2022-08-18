@@ -63,8 +63,8 @@ public class Services {
 		String amount = accountDetails.get("amount");
 		String currentBalance = dao.getAccount(accountNo).getAccountBalance();
 		
-		String updatedBalance = currentBalance + amount;
-		int count = dao.depositMoney(accountNo, updatedBalance);
+		int updatedBalance = Integer.parseInt(currentBalance) + Integer.parseInt(amount);
+		int count = dao.depositMoney(accountNo, String.valueOf(updatedBalance));
 		
 		return count > 0 ? true : false; 
 	}

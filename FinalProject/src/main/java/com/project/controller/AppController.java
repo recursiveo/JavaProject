@@ -68,6 +68,7 @@ public class AppController {
 		return service.getAccountsForUser(username);
 	}
 	
+	@RequestMapping(value = "/depositMoney", method = RequestMethod.POST)
 	public Boolean depositMoney(@RequestBody Map<String, String> accountDetails) {
 		
 		return service.depositMoney(accountDetails);
