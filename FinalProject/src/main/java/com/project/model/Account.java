@@ -27,7 +27,8 @@ public class Account {
 		this.accountType = accountType;
 		this.accountBalance = accountBalance;
 	}
-
+	
+	
 
 	public String getUsername() {
 		return username;

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.model.Account;
@@ -52,6 +53,18 @@ public class AppController {
 	@RequestMapping(value = "/getAllUserAcc", method = RequestMethod.GET)
 	public Map<String, ArrayList<String>> getAllUserAccounts() {
 		return service.getAllUserAccounts();
+	}
+	
+	@RequestMapping(value = "/getUserDetails", method = RequestMethod.GET)
+	public Map<String, String> getUserDetails(@RequestParam("username") String username){
+		
+		return service.getUserDetails(username);
+	}
+	
+	@RequestMapping(value = "/getAccountsForUser", method = RequestMethod.GET)
+	public Map<Integer, Account> getAccountsForUser(@RequestParam("username") String username){
+		
+		return service.getAccountsForUser(username);
 	}
 
 }

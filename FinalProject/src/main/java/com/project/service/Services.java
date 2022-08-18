@@ -19,7 +19,7 @@ public class Services {
 	
 	public Map<String, Integer> createAccount(Account account) {
 		
-		int rowsInserted = dao.account(account);
+		int rowsInserted = dao.createAccount(account);
 		
 		Map<String, Integer> res = new HashMap<String, Integer>();
 		res.put("AccountCreated", rowsInserted);
@@ -45,6 +45,16 @@ public class Services {
 	public Map<String, ArrayList<String>> getAllUserAccounts() {
 		Map<String, ArrayList<String>> map = dao.getAllUserDetails();
 		return map;
+	}
+	
+	public Map<String, String> getUserDetails(String username){
+		
+		return dao.getUserDetails(username);
+	}
+	
+	public Map<Integer, Account> getAccountsForUser(String username){
+		
+		return dao.getAccountDetails(username);
 	}
 
 }

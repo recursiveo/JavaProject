@@ -1,6 +1,5 @@
 package com.project.dao;
 
-import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import com.project.model.Account;
 import com.project.model.User;
-import com.project.model.UserAccountType;
 
 @Component
 public class Dao {
@@ -39,16 +36,14 @@ public class Dao {
 		return con;
 	}
 
-	public int account(Account account) {
+	public int createAccount(Account account) {
 		Random r = new Random( System.currentTimeMillis() );
 	    long accNo = 10000 + r.nextInt(20000);
-	    //System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@ " + String.valueOf(accNo));
 	    account.setAccountNo(String.valueOf(accNo));
 		int rowsInserted = 0;
 		String sql = "INSERT INTO account(`accountNo`, `accountType`, `accountBalance`, `username`) "
 				+ "VALUES (? , ? , ? , ?)";
 		
-		//System.out.println("$$$$$$$$$");
 		System.out.println(account);
 		try {
 			
@@ -65,8 +60,6 @@ public class Dao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-//		Map response  = new HashMap<String, String>();
-//		response.put("data", "Hello");
 
 		return rowsInserted;
 	}
@@ -133,10 +126,10 @@ public class Dao {
 	}
 
 	public Map<String, ArrayList<String>> getAllUserDetails(){
-		//Map<String, String> res = new HashMap<String, String>();
+		
 		Map<String, ArrayList<String>> accMap = new HashMap<String, ArrayList<String>>();
 		Map<String, ArrayList<String>> userAccMap = new HashMap<String, ArrayList<String>>();
-		//String sql = "SELECT a.username, a.fname, a.lname, b.accountNo, b.accountType FROM user a, account b WHERE a.username = b.username order by username;";
+		
 		String sql1 = "SELECT username,fname,lname FROM user";
 		String sql2 = "SELECT username, accountNo, accountType FROM account";
 		
@@ -151,19 +144,6 @@ public class Dao {
 			ResultSet res1 = st1.executeQuery();
 			ResultSet res2 = st2.executeQuery();
 			
-//			while(rowsRetured.next()) {
-//				
-//				if(!(userMap.containsKey(rowsRetured.getString(1)))) {
-//					ArrayList<String> list = new ArrayList<String>();
-//					list.add(rowsRetured.getString(5));
-//					userMap.put(rowsRetured.getString(1), list);
-//				}else {
-//					ArrayList<String> list = userMap.get(rowsRetured.getString(1));
-//					list.add(rowsRetured.getString(5));
-//					userMap.put(rowsRetured.getString(1), list);
-//				}				
-//				
-//			}
 			while(res2.next()) {
 				
 				if(!(accMap.containsKey(res2.getString(1)))) {
@@ -175,7 +155,6 @@ public class Dao {
 					list.add(res2.getString(3));
 					accMap.put(res2.getString(1), list);
 				}	
-				//System.out.println("$$$$$$$$$$$$$$$$$$$$$$$" + accMap);
 			}
 		while(res1.next()) {
 			if(!(userAccMap.containsKey(res1.getString(1)))) {
@@ -192,8 +171,70 @@ public class Dao {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		//System.out.println("^^^^^^^^^^^^^^^^^^^^^" + userAccMap);
 		return userAccMap;
+	}
+	
+	public Map<String, String> getUserDetails(String username){
+		Map<String, String> userDetails = new HashMap<String, String>();
+		String sql = "SELECT username, fname, lname, address, email, phone, sinNumber, role FROM user WHERE username=?";
+		//System.out.println("username" + username);
+		try {
+			Connection con = getConnection();
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setString(1, username);
+			
+			ResultSet rs = pst.executeQuery();
+			
+			while(rs.next()) {
+				userDetails.put("username", rs.getString(1));
+				userDetails.put("fname", rs.getString(2));
+				userDetails.put("lname", rs.getString(3));
+				userDetails.put("address", rs.getString(4));
+				userDetails.put("email", rs.getString(5));
+				userDetails.put("phone", rs.getString(6));
+				userDetails.put("sinNumber", rs.getString(7));
+				userDetails.put("role", rs.getString(8));
+			}
+			
+		}catch (SQLException e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		return userDetails;
+	}
+	
+	public Map<Integer, Account> getAccountDetails(String username){
+		Map<Integer, Account> accDetails = new HashMap<Integer, Account>();
+		String sql = "SELECT `accountNo`, `accountType`, `accountBalance`, `username` FROM `account` WHERE username = ?";
+		
+		try {
+			Connection con = getConnection();
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setString(1, username);
+			
+			ResultSet rs = pst.executeQuery();
+			
+			int count = 0;
+			while(rs.next()) {
+				Account acc = new Account(username, rs.getString(1),rs.getString(2), rs.getString(3));
+				accDetails.put(count++, acc);
+
+			}
+			
+		}catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		return accDetails;
 	}
 
 }
