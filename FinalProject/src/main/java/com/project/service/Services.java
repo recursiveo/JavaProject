@@ -82,7 +82,7 @@ public class Services {
 		int count = dao.depositMoney(accountNo, String.valueOf(updatedBalance));
 		
 		if(count ==  1) {
-			return "Deposited";
+			return "withdraw success";
 		}
 		
 		return "Error";

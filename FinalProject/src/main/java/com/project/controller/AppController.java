@@ -2,6 +2,7 @@ package com.project.controller;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -75,9 +76,12 @@ public class AppController {
 	}
 	
 	@RequestMapping(value = "/withdrawMoney", method = RequestMethod.POST)
-	public String withdrawMoney(@RequestBody Map<String, String> accountDetails) {
+	public Map<String, String> withdrawMoney(@RequestBody Map<String, String> accountDetails) {
 		
-		return service.withdrawMoney(accountDetails);
+		String msg = service.withdrawMoney(accountDetails);
+		
+		HashMap<String, String> hashMap = new HashMap<String, String>(){{ put("message", msg); }};
+		return hashMap;
 	}
 
 }
