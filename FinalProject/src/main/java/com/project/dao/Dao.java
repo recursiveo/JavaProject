@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.project.model.Account;
+import com.project.model.Transaction;
 import com.project.model.User;
 import com.project.util.DatabaseConnection;
 
@@ -368,6 +369,40 @@ public class Dao {
 		}
 		
 		return username;
+	}
+
+	public List<Transaction> getTransactionForUser(String username) {
+		String sql = "SELECT `transactionId`, `fromAccount`, `toAccount`, `status`, "
+				+ "`Amount`, `Date`, `username` FROM `transaction` WHERE username = ?";
+		
+		ArrayList<Transaction> transactionList = new ArrayList<Transaction>(); 
+		try {
+			Connection con = getConnection();
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setString(1, username);
+			
+			ResultSet rs = pst.executeQuery();
+			while(rs.next()) {
+				Transaction transaction = new Transaction(
+						rs.getString(1),
+						rs.getString(2),
+						rs.getString(3),
+						rs.getString(4),
+						rs.getString(5),
+						rs.getString(6),
+						rs.getString(7)
+						);
+				transactionList.add(transaction);
+				
+			}
+		}catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return transactionList;
 	}
 
 }

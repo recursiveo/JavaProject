@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.model.Account;
 import com.project.model.Login;
+import com.project.model.Transaction;
 import com.project.model.User;
 import com.project.service.Services;
 
@@ -97,4 +98,8 @@ public class AppController {
 		return service.checkAccountNo(accNo);
 	}
 	
+	@RequestMapping(value = "/getTransactionForUser", method = RequestMethod.GET)
+	public List<Transaction> getTransactionForUser(@RequestParam String username){
+		return service.getTransactionForUser(username);
+	}
 }

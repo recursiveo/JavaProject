@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import com.project.dao.Dao;
 import com.project.exception.TransactionException;
 import com.project.model.Account;
+import com.project.model.Transaction;
 import com.project.model.User;
 
 @Component
@@ -205,6 +206,11 @@ public class Services {
 			throw new TransactionException("error in recording transaction");
 		}
 		return;
+	}
+
+	public List<Transaction> getTransactionForUser(String username) {
+		
+		return dao.getTransactionForUser(username);
 	}
 
 }
