@@ -96,5 +96,5 @@ public class AppController {
 	public Boolean isValidAccountNo(@RequestParam String accNo) {		
 		return service.checkAccountNo(accNo);
 	}
-
+	
 }

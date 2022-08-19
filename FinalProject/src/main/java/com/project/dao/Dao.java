@@ -10,17 +10,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.project.model.Account;
 import com.project.model.User;
+import com.project.util.DatabaseConnection;
+
+import ch.qos.logback.classic.db.names.DBNameResolver;
 
 @Component
 public class Dao {
+	
+//	@Autowired
+//	private static DatabaseConnection dbConnection;
 
 	public static Connection getConnection() {
-		Connection con = null;
+		 Connection con = null;
 		String user = "root";
 		String password = "";
 		String url = "jdbc:mysql://localhost:3306/projectjava";
@@ -34,6 +42,7 @@ public class Dao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 		return con;
 	}
 
@@ -306,6 +315,59 @@ public class Dao {
 		
 		return count;
 		
+	}
+	
+	public int insertTransaction(Map<String, String> row) {
+		String sql = "INSERT INTO `transaction`(`transactionId`, `fromAccount`, `toAccount`, `status`, `Amount`, `Date`, `username`) VALUES"
+				+ " (?, ?, ?, ?, ?, ?, ?)";
+		//System.out.println("FEEEE-----------");
+		//System.out.println("map  : " + row.toString());
+		int insertCount = 0;
+		try {
+			String uid = UUID.randomUUID().toString();
+			Connection con = getConnection();
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setString(1, uid);
+			pst.setString(2, row.get("fromAcc"));
+			pst.setString(3, row.get("toAcc"));
+			pst.setString(4, row.get("status"));
+			pst.setString(5, row.get("amount"));
+			pst.setString(6, row.get("date"));
+			pst.setString(7, row.get("username"));
+			
+			insertCount = pst.executeUpdate();
+			
+		}catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return insertCount;
+	}
+	
+	public String getUnameForAcc(String acc) {
+		String sql = "SELECT `username` FROM `account` WHERE accountNo = ?";
+		String username = null;
+		try {
+			Connection con = getConnection();
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setString(1, acc);
+			
+			ResultSet rs = pst.executeQuery();
+			while(rs.next()) {
+				username = rs.getString(1);
+			}
+		}catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		return username;
 	}
 
 }

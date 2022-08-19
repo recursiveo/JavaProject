@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
 	
-	public Connection getConnection()
+	public Connection setConnection()
 	{
 	Connection con = null;
 	String user="root";
