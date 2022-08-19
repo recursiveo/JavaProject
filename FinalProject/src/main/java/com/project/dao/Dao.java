@@ -131,7 +131,7 @@ public class Dao {
 		Map<String, ArrayList<String>> accMap = new HashMap<String, ArrayList<String>>();
 		Map<String, ArrayList<String>> userAccMap = new HashMap<String, ArrayList<String>>();
 		
-		String sql1 = "SELECT username,fname,lname FROM user";
+		String sql1 = "SELECT username,fname,lname FROM user where role= 'user'";
 		String sql2 = "SELECT username, accountNo, accountType FROM account";
 		
 		try {
@@ -281,6 +281,31 @@ public class Dao {
 		}
 		
 		return acc;
+	}
+
+	public int checkAccountNo(String accNo) {
+		String sql = "SELECT `accountNo` FROM `account` WHERE accountNo = ?";
+		int count =0;
+		
+		try {
+			Connection con = getConnection();
+			PreparedStatement pst = con.prepareStatement(sql);
+			pst.setString(1, accNo);
+			
+			ResultSet rs = pst.executeQuery();
+			while(rs.next()) {
+				count++;
+			}
+		}catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		return count;
+		
 	}
 
 }

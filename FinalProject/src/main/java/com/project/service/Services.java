@@ -88,4 +88,44 @@ public class Services {
 		return "Error";
 	}
 
+	public String transferMoney(Map<String, String> transferDetails) {
+		String fromAcc = transferDetails.get("fromAcc");
+		String toAcc = transferDetails.get("toAcc");
+		String amount = transferDetails.get("amount");
+		
+		if(checkAccountNo(toAcc)) {
+			String currentBalance = dao.getAccount(fromAcc).getAccountBalance();
+			int updatedBalance_Acc1 = Integer.parseInt(currentBalance) - Integer.parseInt(amount);
+			
+			if(updatedBalance_Acc1 < 0) {
+				return "Insufficient funds in account";
+			}
+			//withdrawing money from *fromAcc*, The method name is just depositMoney --ignore.
+			int count = dao.depositMoney(fromAcc, String.valueOf(updatedBalance_Acc1));
+			
+			
+			
+			if(count == 1) {
+				String toAccountCurrentBalance = dao.getAccount(toAcc).getAccountBalance();
+				int updatedBalance_Acc2 = Integer.parseInt(toAccountCurrentBalance) + Integer.parseInt(amount);
+				
+				//Depositing money to toAcc
+				count+= dao.depositMoney(toAcc, String.valueOf(updatedBalance_Acc2));
+			}
+			
+			if(count == 2) {
+				return "Money Transfer Successfull";
+			}
+		}else {
+			return "Invalid account number provided for toAccount";
+		}
+		
+		return "Error";
+	}
+
+	public Boolean checkAccountNo(String accNo) {
+		int count = dao.checkAccountNo(accNo);		
+		return count == 1 ? true : false;
+	}
+
 }

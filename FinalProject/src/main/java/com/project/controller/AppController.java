@@ -83,5 +83,18 @@ public class AppController {
 		HashMap<String, String> hashMap = new HashMap<String, String>(){{ put("message", msg); }};
 		return hashMap;
 	}
+	
+	@RequestMapping(value = "/transferMoney", method = RequestMethod.POST)
+	public Map<String, String> transferMoney(@RequestBody Map<String, String> transferDetails){
+		
+		String msg = service.transferMoney(transferDetails);
+		HashMap<String, String> hashMap = new HashMap<String, String>(){{ put("message", msg); }};
+		return hashMap;
+	}
+	
+	@RequestMapping(value = "/isValidAccountNo", method = RequestMethod.GET)
+	public Boolean isValidAccountNo(@RequestParam String accNo) {		
+		return service.checkAccountNo(accNo);
+	}
 
 }
