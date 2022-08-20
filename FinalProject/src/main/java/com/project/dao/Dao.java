@@ -24,7 +24,7 @@ public class Dao {
 
 	public int createAccount(Account account) {
 		Random r = new Random(System.currentTimeMillis());
-		long accNo = 10000 + r.nextInt(20000);
+		long accNo = 10000 + r.nextInt(99999);
 		account.setAccountNo(String.valueOf(accNo));
 		int rowsInserted = 0;
 		String sql = "INSERT INTO account(`accountNo`, `accountType`, `accountBalance`, `username`) "
